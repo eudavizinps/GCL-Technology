@@ -1,0 +1,161 @@
+/* Camadas animadas do universo GCL. A imagem, a logo e os textos ficam estáticos. */
+:root {
+  --gcl-hud-purple:157,78,255;
+  --gcl-hud-lilac:205,168,255;
+  --gcl-hud-center-x:68%;
+  --gcl-hud-center-y:42%;
+  --gcl-hud-size:clamp(340px,45vw,720px);
+}
+
+.hero {
+  isolation:isolate;
+  background:
+    linear-gradient(90deg,rgba(4,3,15,.46) 0%,rgba(4,3,15,.18) 44%,rgba(4,3,15,.025) 100%),
+    url('assets/brand/gcl-universe-bg.png') center / cover no-repeat;
+}
+
+.hero-copy,.hero-footer { z-index:3; }
+.hero .entrance { opacity:1; transform:none; transition:none; }
+.hero-grid { z-index:1; opacity:.13; }
+.hero::after { display:none; }
+
+/* O diagrama anterior permanece no HTML, mas cede a área visual à arte oficial do pacote. */
+.system-orbit { display:none; }
+
+.gcl-hud {
+  position:absolute;
+  z-index:2;
+  left:var(--gcl-hud-center-x);
+  top:var(--gcl-hud-center-y);
+  width:var(--gcl-hud-size);
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  contain:layout paint;
+}
+
+.gcl-hud::before {
+  content:"";
+  position:absolute;
+  inset:26%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(var(--gcl-hud-lilac),.18),rgba(var(--gcl-hud-purple),.08) 40%,transparent 71%);
+  animation:gcl-hud-pulse 5s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+
+.gcl-hud::after {
+  content:"";
+  position:absolute;
+  inset:3%;
+  border-radius:50%;
+  opacity:.7;
+  background:conic-gradient(from 8deg,transparent 0 35deg,rgba(var(--gcl-hud-purple),.5) 35deg 72deg,transparent 72deg 160deg,rgba(var(--gcl-hud-lilac),.25) 160deg 215deg,transparent 215deg 325deg,rgba(var(--gcl-hud-purple),.4) 325deg 350deg,transparent 350deg);
+  -webkit-mask:radial-gradient(circle,transparent 0 69%,#000 69.7% 70.4%,transparent 71.2%);
+  mask:radial-gradient(circle,transparent 0 69%,#000 69.7% 70.4%,transparent 71.2%);
+  animation:gcl-hud-spin 16s linear infinite;
+  will-change:transform;
+}
+
+.gcl-hud__depth {
+  position:absolute;
+  inset:0;
+  transform-origin:center;
+  animation:gcl-hud-depth 10s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+
+.gcl-ring {
+  position:absolute;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  opacity:.62;
+  will-change:transform;
+}
+
+.gcl-ring::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:conic-gradient(from 0deg,transparent 0 25deg,rgba(var(--gcl-hud-purple),.62) 25deg 55deg,transparent 55deg 126deg,rgba(var(--gcl-hud-lilac),.38) 126deg 167deg,transparent 167deg 280deg,rgba(var(--gcl-hud-purple),.48) 280deg 315deg,transparent 315deg);
+  -webkit-mask:radial-gradient(circle,transparent 0 calc(100% - 2px),#000 calc(100% - 1.4px));
+  mask:radial-gradient(circle,transparent 0 calc(100% - 2px),#000 calc(100% - 1.4px));
+}
+
+.gcl-ring--1 { width:44%; aspect-ratio:1; animation:gcl-ring-spin-1 10s linear infinite; }
+.gcl-ring--2 { width:58%; aspect-ratio:1; opacity:.48; animation:gcl-ring-spin-2 14s linear infinite reverse; }
+.gcl-ring--3 { width:73%; aspect-ratio:1; opacity:.4; animation:gcl-ring-spin-3 18s linear infinite; }
+.gcl-ring--4 { width:88%; aspect-ratio:1; opacity:.28; animation:gcl-ring-spin-4 12s linear infinite reverse; }
+
+.gcl-orbit {
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:64%;
+  aspect-ratio:1;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  animation:gcl-orbit-spin 10s linear infinite;
+  will-change:transform;
+}
+
+.gcl-orbit::before {
+  content:"";
+  position:absolute;
+  top:4%;
+  left:50%;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  transform:translateX(-50%);
+  background:rgb(var(--gcl-hud-lilac));
+  box-shadow:0 0 6px rgba(var(--gcl-hud-lilac),.95),0 0 14px rgba(var(--gcl-hud-purple),.72);
+}
+
+.gcl-orbit--secondary { width:82%; opacity:.52; animation-duration:16s; animation-direction:reverse; }
+.gcl-orbit--secondary::before { top:50%; left:97%; width:5px; height:5px; }
+
+@keyframes gcl-hud-spin { to { transform:rotate(360deg); } }
+@keyframes gcl-ring-spin-1 { from { transform:translate(-50%,-50%) rotate(0); } to { transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes gcl-ring-spin-2 { from { transform:translate(-50%,-50%) rotate(15deg); } to { transform:translate(-50%,-50%) rotate(375deg); } }
+@keyframes gcl-ring-spin-3 { from { transform:translate(-50%,-50%) rotate(-20deg); } to { transform:translate(-50%,-50%) rotate(340deg); } }
+@keyframes gcl-ring-spin-4 { from { transform:translate(-50%,-50%) rotate(35deg); } to { transform:translate(-50%,-50%) rotate(395deg); } }
+@keyframes gcl-orbit-spin { from { transform:translate(-50%,-50%) rotate(0); } to { transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes gcl-hud-pulse { 0%,100% { opacity:.42; transform:scale(.97); } 50% { opacity:.8; transform:scale(1.04); } }
+@keyframes gcl-hud-depth { 0%,100% { opacity:.92; transform:scale(.995); } 50% { opacity:1; transform:scale(1.012); } }
+
+@media (max-width:1100px) {
+  :root { --gcl-hud-center-x:70%; --gcl-hud-center-y:43%; --gcl-hud-size:clamp(300px,52vw,600px); }
+  .hero { background-position:60% center; }
+}
+
+/* Em notebooks mais altos, a imagem usa "cover" pela altura. Este ajuste mantém
+   o núcleo estático da arte exatamente sob o centro dos anéis animados. */
+@media (min-width:851px) and (max-aspect-ratio:16/10) {
+  .hero { background-position:70% center; }
+}
+
+@media (max-width:850px) {
+  :root { --gcl-hud-center-x:69%; --gcl-hud-center-y:42%; --gcl-hud-size:min(86vw,440px); }
+  .hero {
+    background:
+      linear-gradient(90deg,rgba(4,3,15,.88) 0%,rgba(4,3,15,.62) 56%,rgba(4,3,15,.22) 100%),
+      url('assets/brand/gcl-universe-bg.png') 67% center / cover no-repeat;
+  }
+  .gcl-hud { opacity:.42; }
+  .gcl-ring--4,.gcl-orbit--secondary { display:none; }
+}
+
+@media (max-width:550px) {
+  .gcl-hud { opacity:.26; }
+  .gcl-ring--3 { display:none; }
+}
+
+.gcl-hud.is-paused,.gcl-hud.is-paused * { animation-play-state:paused !important; }
+
+@media (prefers-reduced-motion:reduce) {
+  .gcl-hud,.gcl-hud *,.gcl-hud::before,.gcl-hud::after { animation:none !important; }
+}
