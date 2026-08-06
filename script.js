@@ -52,6 +52,37 @@ window.addEventListener('pointermove', (event) => {
   document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`);
 }, { passive: true });
 
+const cursorOrbit = document.querySelector('.cursor-orbit');
+const canUseCustomCursor = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (cursorOrbit && canUseCustomCursor && !prefersReducedMotion) {
+  const cursorPosition = { x:-60, y:-60, targetX:-60, targetY:-60 };
+  document.body.classList.add('has-custom-cursor');
+
+  const renderCursor = () => {
+    cursorPosition.x += (cursorPosition.targetX - cursorPosition.x) * .18;
+    cursorPosition.y += (cursorPosition.targetY - cursorPosition.y) * .18;
+    cursorOrbit.style.transform = `translate3d(${cursorPosition.x}px,${cursorPosition.y}px,0) translate(-50%,-50%)`;
+    requestAnimationFrame(renderCursor);
+  };
+
+  window.addEventListener('pointermove', (event) => {
+    cursorPosition.targetX = event.clientX;
+    cursorPosition.targetY = event.clientY;
+    cursorOrbit.classList.add('is-visible');
+    const target = event.target instanceof Element ? event.target.closest('a, button') : null;
+    cursorOrbit.classList.toggle('is-hovering', Boolean(target));
+  }, { passive:true });
+
+  window.addEventListener('pointerdown', () => {
+    cursorOrbit.classList.add('is-clicking');
+    window.setTimeout(() => cursorOrbit.classList.remove('is-clicking'), 420);
+  }, { passive:true });
+
+  requestAnimationFrame(renderCursor);
+}
+
 const hero = document.querySelector('.hero');
 const heroHud = document.querySelector('.gcl-hud');
 

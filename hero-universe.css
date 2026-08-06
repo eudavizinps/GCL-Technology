@@ -3,21 +3,51 @@
   --gcl-hud-purple:157,78,255;
   --gcl-hud-lilac:205,168,255;
   --gcl-hud-center-x:68%;
-  --gcl-hud-center-y:42%;
-  --gcl-hud-size:clamp(340px,45vw,720px);
+  --gcl-hud-center-y:43%;
+  --gcl-hud-size:min(45vw,86svh,670px);
 }
 
 .hero {
   isolation:isolate;
   background:
-    linear-gradient(90deg,rgba(4,3,15,.46) 0%,rgba(4,3,15,.18) 44%,rgba(4,3,15,.025) 100%),
-    url('assets/brand/gcl-universe-bg.png') center / cover no-repeat;
+    linear-gradient(90deg,rgba(4,3,15,.46) 0%,rgba(4,3,15,.18) 44%,rgba(4,3,15,.025) 100%) center / 100% 100% no-repeat,
+    url('assets/brand/gcl-universe-bg.png') 68% center / contain no-repeat,
+    #07050f;
 }
 
 .hero-copy,.hero-footer { z-index:3; }
 .hero .entrance { opacity:1; transform:none; transition:none; }
 .hero-grid { z-index:1; opacity:.13; }
 .hero::after { display:none; }
+
+.header .logo img[src$="gcl-logo-home.png"] { transform:scale(1.62); }
+
+.word-rotator {
+  display:inline-grid;
+  min-width:12ch;
+  color:var(--lilac);
+  white-space:nowrap;
+}
+
+.word-rotator > span {
+  grid-area:1 / 1;
+  transform-origin:left center;
+  opacity:0;
+  animation:gcl-word-rotate 16.8s ease-in-out infinite;
+  will-change:opacity,transform;
+}
+
+.word-rotator > span:nth-child(1) { animation-delay:0s; }
+.word-rotator > span:nth-child(2) { animation-delay:2.8s; }
+.word-rotator > span:nth-child(3) { animation-delay:5.6s; }
+.word-rotator > span:nth-child(4) { animation-delay:8.4s; }
+.word-rotator > span:nth-child(5) { animation-delay:11.2s; }
+.word-rotator > span:nth-child(6) { animation-delay:14s; }
+
+@keyframes gcl-word-rotate {
+  0%,13% { opacity:1; transform:translateY(0); }
+  17%,100% { opacity:0; transform:translateY(.32em); }
+}
 
 /* O diagrama anterior permanece no HTML, mas cede a área visual à arte oficial do pacote. */
 .system-orbit { display:none; }
@@ -128,14 +158,13 @@
 @keyframes gcl-hud-depth { 0%,100% { opacity:.92; transform:scale(.995); } 50% { opacity:1; transform:scale(1.012); } }
 
 @media (max-width:1100px) {
-  :root { --gcl-hud-center-x:70%; --gcl-hud-center-y:43%; --gcl-hud-size:clamp(300px,52vw,600px); }
-  .hero { background-position:60% center; }
+  :root { --gcl-hud-center-x:68%; --gcl-hud-center-y:43%; --gcl-hud-size:clamp(300px,52vw,600px); }
+  .hero { background-position:center,68% center,center; }
 }
 
-/* Em notebooks mais altos, a imagem usa "cover" pela altura. Este ajuste mantém
-   o núcleo estático da arte exatamente sob o centro dos anéis animados. */
+/* A arte inteira permanece visível em notebooks mais altos, alinhada aos anéis. */
 @media (min-width:851px) and (max-aspect-ratio:16/10) {
-  .hero { background-position:70% center; }
+  .hero { background-position:center,68% center,center; }
 }
 
 @media (max-width:850px) {
@@ -147,6 +176,7 @@
   }
   .gcl-hud { opacity:.42; }
   .gcl-ring--4,.gcl-orbit--secondary { display:none; }
+  .word-rotator { min-width:0; }
 }
 
 @media (max-width:550px) {
@@ -158,4 +188,6 @@
 
 @media (prefers-reduced-motion:reduce) {
   .gcl-hud,.gcl-hud *,.gcl-hud::before,.gcl-hud::after { animation:none !important; }
+  .word-rotator > span { animation:none; }
+  .word-rotator > span:first-child { opacity:1; }
 }
