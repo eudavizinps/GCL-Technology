@@ -83,6 +83,12 @@ if (cursorOrbit && canUseCustomCursor && !prefersReducedMotion) {
   requestAnimationFrame(renderCursor);
 }
 
+const contactStar = document.querySelector('.contact-star');
+if (contactStar && canUseCustomCursor && !prefersReducedMotion) {
+  contactStar.addEventListener('pointerenter', () => contactStar.classList.add('is-active'));
+  contactStar.addEventListener('pointerleave', () => contactStar.classList.remove('is-active'));
+}
+
 const hero = document.querySelector('.hero');
 const heroHud = document.querySelector('.gcl-hud');
 

@@ -410,3 +410,63 @@
   0%,100% { transform:translate(-50%,-50%) scale(1); box-shadow:0 0 0 11px rgba(189,156,255,.12),0 0 38px rgba(136,77,253,.5); }
   50% { transform:translate(-50%,-50%) scale(1.035); box-shadow:0 0 0 15px rgba(189,156,255,.08),0 0 50px rgba(155,93,255,.72); }
 }
+
+/* Estrela interativa da seção Próximo Passo. */
+.contact-orb::after { content:none; }
+.contact-orb { z-index:2; pointer-events:none; }
+.contact-star {
+  position:absolute;
+  z-index:2;
+  top:50%;
+  left:50%;
+  display:grid;
+  width:156px;
+  aspect-ratio:1;
+  place-items:center;
+  transform:translate(-50%,-50%);
+  pointer-events:auto;
+}
+
+.contact-star::before {
+  content:"✦";
+  color:var(--acid);
+  font:clamp(92px,9vw,130px)/1 var(--sans);
+  text-shadow:0 0 28px rgba(215,183,255,.6),0 0 58px rgba(175,98,255,.28);
+  transition:transform .42s cubic-bezier(.2,.85,.2,1),color .3s ease,text-shadow .3s ease;
+}
+
+.contact-star::after {
+  content:"";
+  position:absolute;
+  inset:23px;
+  border:1px solid rgba(216,184,255,.68);
+  border-radius:50%;
+  opacity:0;
+  transform:scale(.45) rotate(0deg);
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .contact-star:hover::before,
+  .contact-star.is-active::before {
+    color:#fff6ff;
+    text-shadow:0 0 19px #fff,0 0 45px rgba(214,135,255,.92),0 0 84px rgba(159,73,255,.68);
+    transform:scale(1.22) rotate(45deg);
+    animation:contact-star-shimmer 1.45s ease-in-out infinite;
+  }
+
+  .contact-star:hover::after,
+  .contact-star.is-active::after { animation:contact-star-orbit 1.25s ease-out infinite; }
+}
+
+@keyframes contact-star-shimmer {
+  50% { filter:brightness(1.32); transform:scale(1.31) rotate(70deg); }
+}
+
+@keyframes contact-star-orbit {
+  0% { opacity:.82; transform:scale(.45) rotate(0deg); }
+  100% { opacity:0; transform:scale(1.28) rotate(180deg); }
+}
+
+@media (max-width:550px) { .contact-star { width:120px; } }
+
+@media (prefers-reduced-motion:reduce) { .contact-star::before,.contact-star::after { animation:none !important; transition:none !important; } }
